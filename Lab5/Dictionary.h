@@ -24,7 +24,7 @@
 
 #ifndef DICTIONARY_CLASS
 #define DICTIONARY_CLASS
-#include "Lab4.h"
+#include "Lab5.h"
 #include <set>
 #include <string>
 #include <iostream>

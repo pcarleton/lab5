@@ -21,7 +21,7 @@
 #include <vector>
 #include <string>
 #include "LetterTile.h"
-#include "Lab4.h"
+#include "Lab5.h"
 
 using namespace std;
 

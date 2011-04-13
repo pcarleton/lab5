@@ -9,7 +9,7 @@
 
 #ifndef GAMEBOARD
 #define GAMEBOARD
-#include "Lab4.h"
+#include "Lab5.h"
 #include "LetterTile.h"
 #include <map>
 #include <utility>
