@@ -1,4 +1,4 @@
-// Lab3.cpp : Defines the entry point for the console application.
+// Lab5.cpp : Defines the entry point for the console application.
 //
 // Authors: Paul Carleton, Brian Fink, Stanford Rosenthal
 //
@@ -12,7 +12,7 @@
 //   word is defined by a dictionary.
 
 #include "stdafx.h"
-#include "Lab4.h"
+#include "Lab5.h"
 #include "LetterTileCollection.h"
 #include "LetterTile.h"
 #include "WordCollection.h"

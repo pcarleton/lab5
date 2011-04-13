@@ -1,11 +1,11 @@
-// Lab4.h 
+// Lab5.h 
 //
 // Authors: Paul Carleton, Brian Fink, Stanford Rosenthal
 //
 // Purpose: the command line interface for the game
 
-#ifndef LAB_4
-#define LAB_4
+#ifndef LAB_5
+#define LAB_5
 #include "LetterTileDef.h"
 #include <vector>
 #include <string>
