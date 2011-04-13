@@ -15,7 +15,6 @@
 #include "Lab5.h"
 #include "LetterTileCollection.h"
 #include "LetterTile.h"
-#include "WordCollection.h"
 #include "Dictionary.h"
 #include <iostream>
 #include <fstream>
@@ -128,11 +127,11 @@ int main(int argc, char* argv[])
 
 			//Do the play.
 			cout << "Enter what letters from your bag that you want to play." << endl;
-			
+			LetterTileCollection curPlay;
 			//Loop until valid letter tiles selected
 			while (true) {
 				cin >> input;
-				LetterTileCollection curPlay;
+				
 				if (player.subCopy(input, curPlay) >= 0) {
 					break;
 				}
@@ -226,36 +225,66 @@ int usage(char * program_name)
 //Helper functions for determining if args are correct and assigning file names
 //to strings to be used in Main
 bool checkArgs(int argc, char* argv[], string & dict_filename, string & tiledef_filename)
-{
-	//Expected number of arguments if filename is specified or not
-	const int file_spec_arg_num = 5;
+{	
+	//Status for telling what we should be looking for next
+	enum status {UNKNOWN, DICT, PLAYERS, TILEDEF};
 
-	//Indexes of where the -t or -d arguments can occur
-	const int first_tord_ind = 1;
-	const int sec_tord_ind = 3;
+	//initialize status to be unknown
+	status s = UNKNOWN;
+	string cur, next;
+
+	//vector of player names
+	//This should probably be passed in
+	vector<string> pnames;
 	
-	//Indexes of where the filenames can occur
-	const int first_fname_ind = 2;
-	const int sec_fname_ind = 4;
+	//booleans to check which inputs we've recieved
+	bool dInput, tdInput, pInput;
 
-	//If the tiledef filename is defined
-	if (argc == file_spec_arg_num)
-	{
-		//if argument order is -d <dict name> -t <tiledef name>
-		if (isD(argv[first_tord_ind]) && isT(argv[sec_tord_ind])) 
+
+	//Iterate over all arguments
+	for (int i = 0; i < argc; ++i) {
+		cur = argv[i];
+
+		//Handle differently based on status
+		switch (s)
 		{
-			dict_filename = argv[first_fname_ind];
-			tiledef_filename = argv[sec_fname_ind];
-			return true;
-		//if argument order is -t <tiledef name> -d <dict name>
-		} else if (isT(argv[first_tord_ind]) && isD(argv[sec_tord_ind])){
-			dict_filename = argv[sec_fname_ind];
-			tiledef_filename = argv[first_fname_ind];
-			return true;
+		case UNKNOWN:
+			if (cur == "-d") s = DICT;
+			else if (cur == "-p") s = PLAYERS;
+			else if (cur == "-t") s = TILEDEF;
+			else return false;
+			break;
+
+		case DICT: //Handles "-d"
+			if (dInput) return false;
+			dict_filename = cur;
+			s = UNKNOWN;
+			dInput = true;
+			break;
+
+		case PLAYERS: //Handles "-p"
+			next = argv[i+1];
+			//this will only happen if no first player name is given
+			if (cur[0] == '-') return false;
+			//Check to make sure no repeat names
+			if (find(pnames.begin(), pnames.end(), cur) != pnames.end()) return false;
+			pnames.push_back(cur);
+			pInput = true;
+			//If this is the last name, go to unknown state
+			if (next[0] == '-')s = UNKNOWN;
+			break;
+
+		case TILEDEF: //Handles "-t"
+			if (tdInput) return false;
+			tiledef_filename = cur;
+			s = UNKNOWN;
+			tdInput = true;
+			break;
 		}
-	} 
-	return false;
+	}
 	
+	//Return true if we have gotten a dictionary and a player name
+	return dInput && pInput;
 }
 
 //Helper function for checking if argument is -d or -D
