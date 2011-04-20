@@ -8,7 +8,9 @@ using namespace std;
 
 class Player{
 public:
+	Player();
 	Player(string &);
+	bool operator ==(const Player &) const;
 private:
 	string name;
 	LetterTileCollection tileCollection;

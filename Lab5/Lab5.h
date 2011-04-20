@@ -9,20 +9,24 @@
 #include "LetterTileDef.h"
 #include <vector>
 #include <string>
+#include "Player.h"
 
 using namespace std;
 
 int usage(char *);
 
 //Helper functions for checking if the arguments are valid
-bool checkArgs(int, char* argv[], string &, string &, vector<string> &);
+bool checkArgs(int, char* argv[], string &, string &, vector<Player> &);
 bool isD(char*);
 bool isT(char*);
+
+
 
 //Methods to generate tile defs file if the filename specified doesn't exist
 int read_dict(vector<string> &, const char *);
 int gen_tile_defs(const vector<string> &, vector<LetterTileDef> &);
 int write_tile_defs(const vector<LetterTileDef>, const char * filename = "tile_defs.txt");
+int runFiles(string &, string&);
 
 enum direction {VERTICAL, HORIZONTAL};
 

@@ -34,63 +34,13 @@ int main(int argc, char* argv[])
 
 	//Checks if arguments are valid, and assigns values to the dict and tile
 	//def filenames accordingly.
-	vector<string> pnames;
+	vector<Player> pnames;
 	if (checkArgs(argc, argv, dict_filename, tiledef_filename, pnames))
 	{
-		cout << "Players: " << endl;
-		for (vector<string>::iterator iter = pnames.begin(); iter != pnames.end(); ++iter) {
-			cout << *iter << endl;
+		int status = runFiles(dict_filename, tiledef_filename);
+		if(status != SUCCESS) {
+			return status;
 		}
-		//Checks if the dict file specified is valid.
-		ifstream dictfs (dict_filename.c_str());
-		if (!dictfs.is_open())
-		{
-			cout << "Invalid Dictionary filename" << endl;
-			return INVALID_FILENAME_ERR;
-		}
-		dictfs.close();
-		
-		//Checks if the tiledef file is valid.
-		ifstream tdfs (tiledef_filename.c_str());
-		bool readableTDF = tdfs.is_open();
-		tdfs.close();
-		
-		//If the tiledef file isn't valid, it generates it.
-		if (!readableTDF)
-		{
-
-			//Declares vector of C++ style strings.  Pass it and the dictionary filename argument
-			//to the dictionary reading function.  If function returns non-zero value, program returns it
-			//otherwise continies.
-			vector<string> dict;
-			int err = read_dict(dict, dict_filename.c_str());
-
-			if (err != SUCCESS)
-			{
-				return err;
-			}
-
-			//Declares vector of Letter Tile Definitions then fills the vector from the dictionary using
-			//gen_tile_defs
-			vector<LetterTileDef> tileDefs;
-			gen_tile_defs(dict, tileDefs);
-
-			//attempts to write the Letter Tile Defintions to file using "tile_defs.txt"
-			//if no filename was passed as an argument.
-			if (tiledef_filename.length() != 0)
-			{
-				err = write_tile_defs(tileDefs, tiledef_filename.c_str());
-			} else
-			{
-				err = write_tile_defs(tileDefs);
-			}
-
-			if (err != SUCCESS)
-			{
-				return err;
-			}
-		}
-		//Tiledef file has been generated.
 	
 		//Initializes Dictionary and LTC with the files provided/generated
 		Dictionary localDict (dict_filename.c_str());
@@ -215,7 +165,59 @@ int main(int argc, char* argv[])
 	return usage(argv[program_name_index]);
 }
 
+int runFiles(string & dict_filename, string & tiledef_filename) {
+	//Checks if the dict file specified is valid.
+	ifstream dictfs (dict_filename.c_str());
+	if (!dictfs.is_open())
+	{
+		cout << "Invalid Dictionary filename" << endl;
+		return INVALID_FILENAME_ERR;
+	}
+	dictfs.close();
+	
+	//Checks if the tiledef file is valid.
+	ifstream tdfs (tiledef_filename.c_str());
+	bool readableTDF = tdfs.is_open();
+	tdfs.close();
+	
+	//If the tiledef file isn't valid, it generates it.
+	if (!readableTDF)
+	{
 
+		//Declares vector of C++ style strings.  Pass it and the dictionary filename argument
+		//to the dictionary reading function.  If function returns non-zero value, program returns it
+		//otherwise continies.
+		vector<string> dict;
+		int err = read_dict(dict, dict_filename.c_str());
+
+		if (err != SUCCESS)
+		{
+			return err;
+		}
+
+		//Declares vector of Letter Tile Definitions then fills the vector from the dictionary using
+		//gen_tile_defs
+		vector<LetterTileDef> tileDefs;
+		gen_tile_defs(dict, tileDefs);
+
+		//attempts to write the Letter Tile Defintions to file using "tile_defs.txt"
+		//if no filename was passed as an argument.
+		if (tiledef_filename.length() != 0)
+		{
+			err = write_tile_defs(tileDefs, tiledef_filename.c_str());
+		} else
+		{
+			err = write_tile_defs(tileDefs);
+		}
+
+		if (err != SUCCESS)
+		{
+			return err;
+		}
+	}
+	//Tiledef file has been generated.
+	return SUCCESS;
+}
 
 //Helper function to print out the usage message
 int usage(char * program_name) 
@@ -229,7 +231,7 @@ int usage(char * program_name)
 
 //Helper functions for determining if args are correct and assigning file names
 //to strings to be used in Main
-bool checkArgs(int argc, char* argv[], string & dict_filename, string & tiledef_filename, vector<string> & pnames)
+bool checkArgs(int argc, char* argv[], string & dict_filename, string & tiledef_filename, vector<Player> & pnames)
 {	
 	//Status for telling what we should be looking for next
 	enum status {UNKNOWN, DICT, PLAYERS, TILEDEF};
@@ -237,7 +239,7 @@ bool checkArgs(int argc, char* argv[], string & dict_filename, string & tiledef_
 	//initialize status to be unknown
 	status s = UNKNOWN;
 	string cur, next;
-	
+	Player p;
 	//booleans to check which inputs we've recieved
 	bool dInput = false, tdInput = false, pInput= false;
 
@@ -268,8 +270,10 @@ bool checkArgs(int argc, char* argv[], string & dict_filename, string & tiledef_
 			//this will only happen if no first player name is given
 			if (cur[0] == '-') return false;
 			//Check to make sure no repeat names
-			if (find(pnames.begin(), pnames.end(), cur) != pnames.end()) return false;
-			pnames.push_back(cur);
+			p = Player(cur);
+			if (find(pnames.begin(), pnames.end(), p) != pnames.end()) return false;
+			
+			pnames.push_back(p);
 			pInput = true;
 			//If this is the last name, go to unknown state
 			if (i+1 < argc) {
