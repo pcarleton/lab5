@@ -12,6 +12,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include "Lab5.h"
 
 //Default constructor, initiliazes container of lettertiles to empty
 LetterTileCollection::LetterTileCollection(): letters() {
