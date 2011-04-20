@@ -27,16 +27,20 @@ int main(int argc, char* argv[])
 	srand(static_cast<unsigned int>(time(0))); // seed our random-number generator with the current time
 	
 	//Useful constants used later.
-	const int program_name_index = 0;
-	const int numPlayers = 3;
+	const int program_name_index= 0;
 	const int numTilesPerPlayer = 7;
 
 	string dict_filename, tiledef_filename;
 
 	//Checks if arguments are valid, and assigns values to the dict and tile
 	//def filenames accordingly.
-	if (checkArgs(argc, argv, dict_filename, tiledef_filename))
+	vector<string> pnames;
+	if (checkArgs(argc, argv, dict_filename, tiledef_filename, pnames))
 	{
+		cout << "Players: " << endl;
+		for (vector<string>::iterator iter = pnames.begin(); iter != pnames.end(); ++iter) {
+			cout << *iter << endl;
+		}
 		//Checks if the dict file specified is valid.
 		ifstream dictfs (dict_filename.c_str());
 		if (!dictfs.is_open())
@@ -224,7 +228,7 @@ int usage(char * program_name)
 
 //Helper functions for determining if args are correct and assigning file names
 //to strings to be used in Main
-bool checkArgs(int argc, char* argv[], string & dict_filename, string & tiledef_filename)
+bool checkArgs(int argc, char* argv[], string & dict_filename, string & tiledef_filename, vector<string> & pnames)
 {	
 	//Status for telling what we should be looking for next
 	enum status {UNKNOWN, DICT, PLAYERS, TILEDEF};
@@ -232,17 +236,13 @@ bool checkArgs(int argc, char* argv[], string & dict_filename, string & tiledef_
 	//initialize status to be unknown
 	status s = UNKNOWN;
 	string cur, next;
-
-	//vector of player names
-	//This should probably be passed in
-	vector<string> pnames;
 	
 	//booleans to check which inputs we've recieved
-	bool dInput, tdInput, pInput;
+	bool dInput = false, tdInput = false, pInput= false;
 
 
 	//Iterate over all arguments
-	for (int i = 0; i < argc; ++i) {
+	for (int i = 1; i < argc; ++i) {
 		cur = argv[i];
 
 		//Handle differently based on status
@@ -263,7 +263,7 @@ bool checkArgs(int argc, char* argv[], string & dict_filename, string & tiledef_
 			break;
 
 		case PLAYERS: //Handles "-p"
-			next = argv[i+1];
+			
 			//this will only happen if no first player name is given
 			if (cur[0] == '-') return false;
 			//Check to make sure no repeat names
@@ -271,7 +271,10 @@ bool checkArgs(int argc, char* argv[], string & dict_filename, string & tiledef_
 			pnames.push_back(cur);
 			pInput = true;
 			//If this is the last name, go to unknown state
-			if (next[0] == '-')s = UNKNOWN;
+			if (i+1 < argc) {
+				next = argv[i+1];
+				if (next[0] == '-') s = UNKNOWN;
+			}
 			break;
 
 		case TILEDEF: //Handles "-t"
@@ -284,21 +287,8 @@ bool checkArgs(int argc, char* argv[], string & dict_filename, string & tiledef_
 	}
 	
 	//Return true if we have gotten a dictionary and a player name
-	return dInput && pInput;
+	return true;
 }
-
-//Helper function for checking if argument is -d or -D
-bool isD(char * arg)
-{
-	return ((strcmp (arg, "-d") == 0) || (strcmp (arg, "-D") == 0));
-}
-
-//Helper function for checking if argument is -t or -T
-bool isT(char * arg)
-{
-	return ((strcmp (arg, "-t") == 0) || (strcmp (arg, "-T") == 0));
-}
-
 
 //Stores words from dictionary into the vector passed as argument "result"
 //Returns 2 if unsuccessful in opening file, 4 if improper file
