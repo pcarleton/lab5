@@ -46,8 +46,11 @@ int main(int argc, char* argv[])
 		Dictionary localDict (dict_filename.c_str());
 		LetterTileCollection letterBag(tiledef_filename.c_str());
 
+
 		GameBoard game(&localDict);
 		LetterTileCollection player;
+		
+		game.addSpecialCells("special_cells.txt");
 
 		bool continuePlaying = true;
 		unsigned int numTilesNeeded = 0;
