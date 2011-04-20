@@ -140,6 +140,7 @@ int main(int argc, char* argv[])
 					break;
 				}
 				cout << "You don't have those tiles" << endl;
+				player.print(cout);
 			}
 
 			

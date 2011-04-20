@@ -52,7 +52,8 @@ int LetterTileCollection::subCopy(string & input, LetterTileCollection & other) 
 	bool found = false;
 	for (string::iterator inIter = input.begin(); inIter != input.end(); ++inIter)
 	{
-		for (vector<LetterTile>::const_iterator letIter = letters.begin(); letIter != letters.end(); ++letIter)
+		found = false;
+		for (vector<LetterTile>::iterator letIter = letters.begin(); letIter != letters.end(); ++letIter)
 		{
 			if (*inIter == letIter->letter) {
 				subLets.push_back(*letIter);
@@ -62,6 +63,7 @@ int LetterTileCollection::subCopy(string & input, LetterTileCollection & other) 
 			}
 		}
 		if (!found) {
+			addVect(subLets);
 			return -1;
 		}
 	}
