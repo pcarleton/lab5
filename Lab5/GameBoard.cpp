@@ -56,6 +56,7 @@ void GameBoard::print(ostream & os)
 		topBot << abs(x);
 	}
 	char curChar;
+	pair<int,int> coord; // current coordinate
 	//first print out the topBot screen on top
 	os << topBot.str() << endl;
 	for (int y = MIN_COORD; y <= MAX_COORD; ++y)
@@ -67,9 +68,30 @@ void GameBoard::print(ostream & os)
 		//empty spots on the board
 		for (int x = MIN_COORD; x <= MAX_COORD; ++x)
 		{	
-			LetterTile * cur = cells.find(make_pair(x, y))->second;
+			coord = make_pair(x, y);
+			LetterTile * cur = cells.find(coord)->second;
 			if ( cur == EMPTY_POINTER)
 			{
+				if(dl.find(coord) != dl.end())
+				{
+					os << "-";
+					continue;
+				}
+				if(tl.find(coord) != tl.end())
+				{
+					os << "+";
+					continue;
+				}
+				if(dw.find(coord) != dw.end())
+				{
+					os << "*";
+					continue;
+				}
+				if(tw.find(coord) != tw.end())
+				{
+					os << "^";
+					continue;
+				}
 				os << " ";
 			} else {
 				//Capitalize the letter
@@ -167,6 +189,27 @@ direction GameBoard::oppDir(const direction & dir)
 	}
 }
 
+string GameBoard::checkCell(pair<int,int> coord)
+{
+	if(dl.find(coord) != dl.end())
+	{
+		return "dl";
+	}
+	if(tl.find(coord) != tl.end())
+	{
+		return "tl";
+	}
+	if(dw.find(coord) != dw.end())
+	{
+		return "dw";
+	}
+	if(tw.find(coord) != tw.end())
+	{
+		return "tw";
+	}
+	return "";
+}
+
 // Checks to make sure the word is contained in the dictionary
 int GameBoard::checkWords(pair<int, int> start, direction dir)
 {
@@ -185,13 +228,39 @@ int GameBoard::checkWords(pair<int, int> start, direction dir)
 	vector<LetterTile> curLets;
 	//Add letter tiles to current word until we run into an empty space or
 	//end of the word
+
+	LetterTile * curTile; 
+
 	while (*varies <= MAX_COORD && cells.find(start)->second != 0)
 	{
-		//Pushes the letter tile at the coordinate into the vector of letter tiles
-		curLets.push_back(*cells.find(start)->second);
-		++(*varies);
+		
+		curTile = cells.find(start)->second;
+
+			//Pushes the letter tile at the coordinate into the vector of letter tiles
+			curLets.push_back(*curTile);
+			
+				
+			//Special cell?
+			string bonus = checkCell(cells.find(start)->first);
+
+			if(bonus == "tl")
+			{
+				curTile->score = curTile->score*3;
+				cout << "Triple letter score of " << curTile->score << " for " << curTile->letter << "!" << endl;
+			}
+			if(bonus == "dl")
+			{
+				curTile->score = curTile->score*2;
+				cout << "Double letter score of " << curTile->score << " for " << curTile->letter << "!" << endl;
+			}
+
+			bonus = ""; //unset
+			++(*varies);
+		
 	}
 	LetterTileCollection curWord(curLets);
+
+	// apply word multpliers
 
 	//If there are no neighbors, return 0
 	if (curWord.size() == 1) {
@@ -380,5 +449,55 @@ void GameBoard::showPossiblePlays(LetterTileCollection & curPlay) {
 	}
 	if(!someValidPlay) {
 		cout << "*** There aren't any possible plays with that sequence, try another. ***" << endl;
+	}
+}
+
+int GameBoard::addSpecialCells(const char *filename) {
+	ifstream ifs (filename);
+	pair<int, int> coord;
+	int x, y;
+	string type;
+	if (ifs.is_open())
+	{
+		string line;
+
+		//Reads lines in from tiledef file
+		while(getline(ifs, line))
+		{
+			istringstream iss (line);
+
+			//extracts LetterTile variables from line
+			if (iss >> x >> y >> type)
+			{	
+				coord = make_pair(x, y);
+				if(type == "dl")
+				{
+					dl.insert(coord);
+
+				}
+				if(type == "tl")
+				{
+					tl.insert(coord);
+				}
+				if(type == "dw")
+				{
+					dw.insert(coord);
+				}
+				if(type == "tw")
+				{
+					tw.insert(coord);
+				}
+
+			} else {
+				//Returns error if the extraction fails
+				cout << "Improperly formatted special cells file." << endl;
+				return SPECIAL_CELLS_FORMAT_ERR;
+			}
+		}
+		return SUCCESS;
+	} else {
+		//Returns 3 if unable to open tile definition file
+		cout << "Error in opening special cells file." << endl;
+		return READ_SPECIAL_CELLS_ERR;
 	}
 }

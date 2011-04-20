@@ -29,13 +29,18 @@ class GameBoard {
 private:
 	const Dictionary * dict;
 	map<pair<int,int>,LetterTile*> cells;
+
+	set<pair<int,int>> dl;
+	set<pair<int,int>> tl;
+	set<pair<int,int>> dw;
+	set<pair<int,int>> tw;
 	
 	bool checkIntersect(pair<int, int>, direction, int);
 	bool tilePresent(int, int);
 
 	bool checkBounds(pair<int,int>, int, direction);
 	
-
+	string checkCell(pair<int,int>);
 	
 
 	int checkWords(pair<int, int>, direction);
@@ -44,6 +49,7 @@ private:
 	bool placeTiles(const LetterTileCollection & ltc, direction dir, 
 						   vector<pair<int,int>> & placedTiles, pair<int, int> coords);
 	void removeInvalidTiles(vector<pair<int,int>> & tiles);
+
 	
 public:
 	//Suggesting is defaulted to false.  This argument specifies if the game is "suggesting" plays
@@ -54,6 +60,7 @@ public:
 	GameBoard(const Dictionary *);
 	void print(ostream &);
 	void showPossiblePlays(LetterTileCollection &);
+	int addSpecialCells(const char *);
 };
 
 

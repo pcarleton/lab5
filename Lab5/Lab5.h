@@ -39,5 +39,7 @@ const int READ_TILEDEF_ERR = 4;
 const int TILEDEF_FORMAT_ERR = 5;
 const int WRITE_TD_ERR = 6;
 const int ERROR = -1;
+const int SPECIAL_CELLS_FORMAT_ERR = 7;
+const int READ_SPECIAL_CELLS_ERR = 8;
 
 #endif
