@@ -101,7 +101,8 @@ int LetterTileCollection::add(const char *filename) {
 			//extracts LetterTile variables from line
 			if (iss >> letter >> score >> count)
 			{	
-
+				// Convert tile to lowercase
+				letter = tolower(letter);
 				//Creates count new LetterTiles with extracted variables
 				for (int i = 0; i < count; ++i)
 				{

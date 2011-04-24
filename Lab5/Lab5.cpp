@@ -168,6 +168,8 @@ int main(int argc, char* argv[])
 	return usage(argv[program_name_index]);
 }
 
+
+// Preprocesses the dictionary and tile files
 int runFiles(string & dict_filename, string & tiledef_filename) {
 	//Checks if the dict file specified is valid.
 	ifstream dictfs (dict_filename.c_str());
