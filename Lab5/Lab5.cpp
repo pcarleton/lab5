@@ -48,26 +48,29 @@ int main(int argc, char* argv[])
 
 
 		GameBoard game(&localDict);
-		LetterTileCollection player;
 		
 		game.addSpecialCells("special_cells.txt");
 
 		bool continuePlaying = true;
 		unsigned int numTilesNeeded = 0;
-		int curScore = 0;
+		
+
+		Player * currentPlayer = &pnames[0];
+		int currentPlayerIndex = 0;
 
 		while(continuePlaying)
 		{
-
+			int curScore = 0;
 			letterBag.shuffle();
-			numTilesNeeded = numTilesPerPlayer - player.size();
+			numTilesNeeded = numTilesPerPlayer - currentPlayer->numTiles();
 
-			player.move(letterBag, numTilesNeeded);
+			currentPlayer->receiveTiles(letterBag, numTilesNeeded);
+			cout << "It is " << currentPlayer->getName() << "'s turn." << endl;
 			cout << "Current Board " << endl << endl;
 			game.print(cout);
 			cout << endl << "Current Letters" << endl;
-			player.print(cout);
-			cout << "Current Score: " << curScore << endl;
+			currentPlayer->showTiles(cout);
+			cout << "Current Score: " << currentPlayer->getScore() << endl;
 
 			cout << "~~~****Do you want to make a move? (Y or N) ******~~~~~" << endl;
 			string input;
@@ -88,12 +91,11 @@ int main(int argc, char* argv[])
 			//Loop until valid letter tiles selected
 			while (true) {
 				cin >> input;
-				
-				if (player.subCopy(input, curPlay) >= 0) {
+				if (currentPlayer->checkString(input, curPlay) >= 0) {
 					break;
 				}
 				cout << "You don't have those tiles" << endl;
-				player.print(cout);
+				currentPlayer->showTiles(cout);
 			}
 
 			
@@ -137,29 +139,37 @@ int main(int argc, char* argv[])
 			
 			//Process the play
 			int playScore = game.play(curPlay,curCoords, dir);
+			cout << "PLAY SCORE: " << playScore << endl;
 			if (playScore <= 0) {
 				cout << "That play didn't work" << endl;
 				cout << "Possible plays that may work:" << endl;
 				game.showPossiblePlays(curPlay);
-				player.move(curPlay,curPlay.size());
+				currentPlayer->receiveTiles(curPlay,curPlay.size());
 				continue;
 			} else {
-
 				curScore += playScore;
 				//Give the player 50 bonus points for playing all 7 tiles.
-				if (player.size() == 0) {
+				if (currentPlayer->numTiles() == 0) {
 					cout << "EXTRA BONUS!!!!" << endl;
 					curScore += 50;
 				}
 
 				//End the game if there are no letter tiles left in 
 				//the bag or the player's collection
-				if (letterBag.size() == 0 && player.size() == 0) {
+				if (letterBag.size() == 0 && currentPlayer->numTiles() == 0) {
 					cout << "YOU WIN!" << endl;
 					break;
 				}
 			}
-
+			currentPlayer->addScore(curScore);
+			currentPlayerIndex++;
+			cout << "CURRENT PALYER INDEX: " << currentPlayerIndex << "    NUM PLAYRES: " << pnames.size() << endl;
+			if(currentPlayerIndex == pnames.size()) {
+				currentPlayerIndex = 0;
+			}
+			cout << "INDEX: " << currentPlayerIndex << "    " << pnames[currentPlayerIndex].getName() << endl;
+			currentPlayer = &pnames[currentPlayerIndex];
+			cout << "NAME: " << currentPlayer->getName() << endl;
 		}
 		
 		return SUCCESS;

@@ -11,6 +11,13 @@ public:
 	Player();
 	Player(string &);
 	bool operator ==(const Player &) const;
+	int numTiles();
+	void receiveTiles(LetterTileCollection &, int);
+	void showTiles(ostream & = cout);
+	int getScore();
+	void addScore(int);
+	int checkString(string &, LetterTileCollection &);
+	string getName();
 private:
 	string name;
 	LetterTileCollection tileCollection;
