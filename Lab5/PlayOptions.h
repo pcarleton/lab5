@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include <iostream>
-#include "Lab5.h"
+
 using namespace std;
 
 struct PlayOptions{

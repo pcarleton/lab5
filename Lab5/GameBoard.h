@@ -15,17 +15,15 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+#include "Constants.h"
+#include "Dictionary.h"
 #include "LetterTileCollection.h"
-#include "Lab5.h"
 #define MIN_COORD -7
 #define MAX_COORD 7
 #define INVALID_PLAY 0
 #define EMPTY_POINTER 0
 
 using namespace std;
-
-class Dictionary;
-class LetterTileCollection;
 
 class GameBoard {
 private:
