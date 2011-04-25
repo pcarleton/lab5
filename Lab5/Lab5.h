@@ -6,10 +6,16 @@
 
 #ifndef LAB_5
 #define LAB_5
-#include "LetterTileDef.h"
+enum direction {VERTICAL, HORIZONTAL};
 #include <vector>
 #include <string>
+#include "LetterTile.h"
+#include "LetterTileDef.h"
+#include "LetterTileCollection.h"
+#include "Dictionary.h"
+#include "GameBoard.h"
 #include "Player.h"
+#include "PlayOptions.h"
 
 using namespace std;
 
@@ -28,7 +34,7 @@ int gen_tile_defs(const vector<string> &, vector<LetterTileDef> &);
 int write_tile_defs(const vector<LetterTileDef>, const char * filename = "tile_defs.txt");
 int runFiles(string &, string&);
 
-enum direction {VERTICAL, HORIZONTAL};
+
 
 //Constants for return values from functions.
 const int SUCCESS = 0;

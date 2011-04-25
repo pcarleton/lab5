@@ -6,13 +6,12 @@
 // as specified in "LetterTileCollection.h"
 
 #include "stdafx.h"
-#include "LetterTileCollection.h"
 #include <vector>
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <algorithm>
-#include "Lab5.h"
+#include "LetterTileCollection.h"
 
 //Default constructor, initiliazes container of lettertiles to empty
 LetterTileCollection::LetterTileCollection(): letters() {
