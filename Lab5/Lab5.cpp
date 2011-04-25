@@ -57,14 +57,22 @@ int main(int argc, char* argv[])
 
 		Player * currentPlayer = &pnames[0];
 		int currentPlayerIndex = 0;
-
+		int unsuccessfulPlays = 0;
 		while(continuePlaying)
 		{
+			currentPlayer = &pnames[currentPlayerIndex];
+			LetterTileCollection curPlay;
+			int playScore = 0;
 			int curScore = 0;
+			string dirstr;
+			direction dir;
+			int x, y;
+			pair<int, int> curCoords;
+
 			letterBag.shuffle();
 			numTilesNeeded = numTilesPerPlayer - currentPlayer->numTiles();
-
 			currentPlayer->receiveTiles(letterBag, numTilesNeeded);
+
 			cout << "It is " << currentPlayer->getName() << "'s turn." << endl;
 			cout << "Current Board " << endl << endl;
 			game.print(cout);
@@ -72,106 +80,120 @@ int main(int argc, char* argv[])
 			currentPlayer->showTiles(cout);
 			cout << "Current Score: " << currentPlayer->getScore() << endl;
 
-			cout << "~~~****Do you want to make a move? (Y or N) ******~~~~~" << endl;
-			string input;
-			cin >> input;
-			transform(input.begin(), input.end(),input.begin(), ::tolower);
-			
-			//Process y or n, default to continue playing if other char entered
-			if (input == "n") {
-				cout<< "DONE PLAYING" << endl;
-				return 0;
-			}else if (input != "y") {
-				cout << "That wasn't a y... I'll assume you want to keep playing" << endl;
-			}
+			int playChoice = currentPlayer->getPlayChoice();
 
-			//Do the play.
-			cout << "Enter what letters from your bag that you want to play." << endl;
-			LetterTileCollection curPlay;
-			//Loop until valid letter tiles selected
-			while (true) {
-				cin >> input;
-				if (currentPlayer->checkString(input, curPlay) >= 0) {
+			switch(playChoice){
+				case 1:
+					letterBag.move(currentPlayer->getTileCollection(), currentPlayer->getTileCollection().size());
+					letterBag.shuffle();
+					currentPlayer->receiveTiles(letterBag, numTilesPerPlayer);
+					currentPlayerIndex++;
+					unsuccessfulPlays++;
+					if(unsuccessfulPlays == pnames.size()) {
+						continuePlaying = false;
+					}
+					break;
+				case 2:
+					//Do the play.
+					curPlay = LetterTileCollection();
+					cout << "Enter what letters from your bag that you want to play." << endl;
+					
+					//Loop until valid letter tiles selected
+					while (true) {
+						string input;
+						cin >> input;
+						if (currentPlayer->checkString(input, curPlay) >= 0) {
+							break;
+						}
+						cout << "You don't have those tiles" << endl;
+						currentPlayer->showTiles(cout);
+					}
+
+					
+					cout << "Enter the *start* coordinates of the *main* word:" << endl;
+					
+					//Loop until valid coords recieved
+					while(true){
+						cin >> x;
+						cin.clear();
+						cin.sync();
+						cin >> y;
+						cin.clear();
+						cin.sync();
+						curCoords = make_pair(x, y);
+						if (game.checkBounds(curCoords)) {
+							break;
+						}
+						cout << "Invalid play, please enter 2 coordinates within the board." << endl;
+					}
+
+					cout << "Playing at : ( " << x << ", " << y << ")" << endl;
+					
+
+					//Loop until valid direction recieved
+					while (true) {
+						cout << "Enter which direction to play (v for vert, h for horiz)" << endl;
+						cin >> dirstr;
+						
+						if (dirstr == "v") {
+							dir = VERTICAL;
+							break;
+						} else if (dirstr == "h"){
+							dir = HORIZONTAL;
+							break;
+						} else {
+							cout << "Please enter a v or h" << endl;
+						}
+					}
+					
+					//Process the play
+
+					playScore = game.play(curPlay,curCoords, dir);
+					cout << "PLAY SCORE: " << playScore << endl;
+					if (playScore <= 0) {
+						cout << "That play didn't work" << endl;
+						cout << "Possible plays that may work:" << endl;
+						game.showPossiblePlays(curPlay);
+						currentPlayer->receiveTiles(curPlay,curPlay.size());
+						continue;
+					} else {
+						curScore += playScore;
+						//Give the player 50 bonus points for playing all 7 tiles.
+						if (currentPlayer->numTiles() == 0) {
+							cout << "EXTRA BONUS!!!!" << endl;
+							curScore += 50;
+						}
+
+						//End the game if there are no letter tiles left in 
+						//the bag or the player's collection
+						if (letterBag.size() == 0 && currentPlayer->numTiles() == 0) {
+							cout << "YOU WIN!" << endl;
+							break;
+						}
+					}
+					unsuccessfulPlays = 0;
+					currentPlayer->addScore(curScore);
+					currentPlayerIndex++;
+					break;
+				case 3:
+					letterBag.move(currentPlayer->getTileCollection(), currentPlayer->getTileCollection().size());
+					pnames.erase(pnames.begin()+currentPlayerIndex);
+					if(pnames.size() == 1) {
+						continuePlaying = false;
+					}
+					break;
+					
+				default:
+					cout << "That was an invalid choice.";
 					break;
 				}
-				cout << "You don't have those tiles" << endl;
-				currentPlayer->showTiles(cout);
-			}
 
-			
-			cout << "Enter the *start* coordinates of the *main* word:" << endl;
-			int x, y;
-			pair<int, int> curCoords;
-			//Loop until valid coords recieved
-			while(true){
-				cin >> x;
-				cin.clear();
-				cin.sync();
-				cin >> y;
-				cin.clear();
-				cin.sync();
-				curCoords = make_pair(x, y);
-				if (game.checkBounds(curCoords)) {
-					break;
+				if(currentPlayerIndex == pnames.size()) {
+					currentPlayerIndex = 0;
 				}
-				cout << "Invalid play, please enter 2 coordinates within the board." << endl;
-			}
-
-			cout << "Playing at : ( " << x << ", " << y << ")" << endl;
-			string dirstr;
-			direction dir;
-
-			//Loop until valid direction recieved
-			while (true) {
-				cout << "Enter which direction to play (v for vert, h for horiz)" << endl;
-				cin >> dirstr;
 				
-				if (dirstr == "v") {
-					dir = VERTICAL;
-					break;
-				} else if (dirstr == "h"){
-					dir = HORIZONTAL;
-					break;
-				} else {
-					cout << "Please enter a v or h" << endl;
-				}
 			}
 			
-			//Process the play
-			int playScore = game.play(curPlay,curCoords, dir);
-			cout << "PLAY SCORE: " << playScore << endl;
-			if (playScore <= 0) {
-				cout << "That play didn't work" << endl;
-				cout << "Possible plays that may work:" << endl;
-				game.showPossiblePlays(curPlay);
-				currentPlayer->receiveTiles(curPlay,curPlay.size());
-				continue;
-			} else {
-				curScore += playScore;
-				//Give the player 50 bonus points for playing all 7 tiles.
-				if (currentPlayer->numTiles() == 0) {
-					cout << "EXTRA BONUS!!!!" << endl;
-					curScore += 50;
-				}
-
-				//End the game if there are no letter tiles left in 
-				//the bag or the player's collection
-				if (letterBag.size() == 0 && currentPlayer->numTiles() == 0) {
-					cout << "YOU WIN!" << endl;
-					break;
-				}
-			}
-			currentPlayer->addScore(curScore);
-			currentPlayerIndex++;
-			cout << "CURRENT PALYER INDEX: " << currentPlayerIndex << "    NUM PLAYRES: " << pnames.size() << endl;
-			if(currentPlayerIndex == pnames.size()) {
-				currentPlayerIndex = 0;
-			}
-			cout << "INDEX: " << currentPlayerIndex << "    " << pnames[currentPlayerIndex].getName() << endl;
-			currentPlayer = &pnames[currentPlayerIndex];
-			cout << "NAME: " << currentPlayer->getName() << endl;
-		}
-		
 		return SUCCESS;
 	}
 //Passes program name argument to usage function to print helpful usage message.

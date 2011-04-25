@@ -18,6 +18,8 @@ public:
 	void addScore(int);
 	int checkString(string &, LetterTileCollection &);
 	string getName();
+	virtual int getPlayChoice();
+	LetterTileCollection & getTileCollection();
 private:
 	string name;
 	LetterTileCollection tileCollection;
