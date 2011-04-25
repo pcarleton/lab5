@@ -4,9 +4,12 @@
 #include <string>
 #include <iostream>
 #include "LetterTileCollection.h"
+#include "GameBoard.h"
 #include "PlayOptions.h"
 
 using namespace std;
+
+class GameBoard;
 
 class Player{
 public:
@@ -25,6 +28,7 @@ public:
 	virtual PlayOptions obtainPlayOptions(GameBoard &);
 private:
 	string name;
+	LetterTileCollection tileCollection;
 	unsigned int score;
 };
 

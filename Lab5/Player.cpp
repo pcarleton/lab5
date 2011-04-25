@@ -37,10 +37,10 @@ int Player::getPlayChoice() {
 	cin >> input;
 	return atoi(input.c_str());
 }
-LetterTileCollection & Player::getTileCollection(GameBoard & game) {
+LetterTileCollection & Player::getTileCollection() {
 	return tileCollection;
 }
-PlayOptions Player::obtainPlayOptions() {
+PlayOptions Player::obtainPlayOptions(GameBoard & game) {
 	cout << "Enter what letters from your bag that you want to play." << endl;
 	LetterTileCollection curPlay;
 	PlayOptions playOps;
@@ -53,13 +53,15 @@ PlayOptions Player::obtainPlayOptions() {
 			break;
 		}
 		cout << "You don't have those tiles" << endl;
-		currentPlayer->showTiles(cout);
+		showTiles(cout);
 	}
 
 	
 	cout << "Enter the *start* coordinates of the *main* word:" << endl;
 	
 	//Loop until valid coords recieved
+	int x = 0;
+	int y = 0;
 	while(true){
 		cin >> x;
 		cin.clear();
@@ -67,7 +69,7 @@ PlayOptions Player::obtainPlayOptions() {
 		cin >> y;
 		cin.clear();
 		cin.sync();
-		curCoords = make_pair(x, y);
+		pair<int,int> curCoords = make_pair(x, y);
 		if (game.checkBounds(curCoords)) {
 			playOps.coords = curCoords;
 			break;
@@ -79,6 +81,8 @@ PlayOptions Player::obtainPlayOptions() {
 	
 
 	//Loop until valid direction recieved
+	string dirstr;
+	direction dir;
 	while (true) {
 		cout << "Enter which direction to play (v for vert, h for horiz)" << endl;
 		cin >> dirstr;
