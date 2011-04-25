@@ -51,6 +51,7 @@ private:
 	bool placeTiles(const LetterTileCollection & ltc, direction dir, 
 						   vector<pair<int,int>> & placedTiles, pair<int, int> coords);
 	void removeInvalidTiles(vector<pair<int,int>> & tiles);
+	void eraseMultipliers(vector<pair<int,int>> &, set<pair<int,int>> &);
 
 	
 public:

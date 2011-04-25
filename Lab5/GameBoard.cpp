@@ -173,8 +173,13 @@ int GameBoard::play(const LetterTileCollection & ltc,
 	//Remove all the tiles if we are only trying to suggest possible plays.
 	if (suggesting) {
 		removeInvalidTiles(placedTiles);
-	}
+	} else {
+		eraseMultipliers(placedTiles, dl);
+		eraseMultipliers(placedTiles, tl);
+		eraseMultipliers(placedTiles, dw);
+		eraseMultipliers(placedTiles, tw);
 
+	}
 	return totalScore;
 }
 
@@ -245,12 +250,12 @@ int GameBoard::checkWords(pair<int, int> start, direction dir)
 
 			if(bonus == "tl")
 			{
-				curTile->score = curTile->score*3;
+				curLets[curLets.size()-1].score = curLets[curLets.size()-1].score*3;
 				cout << "Triple letter score of " << curTile->score << " for " << curTile->letter << "!" << endl;
 			}
 			if(bonus == "dl")
 			{
-				curTile->score = curTile->score*2;
+				curLets[curLets.size()-1].score = curLets[curLets.size()-1].score*2;
 				cout << "Double letter score of " << curTile->score << " for " << curTile->letter << "!" << endl;
 			}
 
@@ -499,5 +504,13 @@ int GameBoard::addSpecialCells(const char *filename) {
 		//Returns 3 if unable to open tile definition file
 		cout << "Error in opening special cells file." << endl;
 		return READ_SPECIAL_CELLS_ERR;
+	}
+}
+void GameBoard::eraseMultipliers(vector<pair<int,int>> & locs, set<pair<int,int>> & bonus) {
+	for(vector<pair<int,int>>::iterator iter = locs.begin(); iter != locs.end(); ++iter) {
+		set<pair<int,int>>::iterator setIter = bonus.find(*iter);
+		if(setIter != bonus.end()) {
+			bonus.erase(setIter);
+		}
 	}
 }
