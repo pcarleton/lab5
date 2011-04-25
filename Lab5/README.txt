@@ -1,0 +1,1 @@
+fix double letter tiles getting doubled and counted twice
