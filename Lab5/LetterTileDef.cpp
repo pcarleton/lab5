@@ -7,7 +7,6 @@
 
 #include "stdafx.h"
 #include "LetterTileDef.h"
-#include "LetterTile.h"
 
 
 LetterTileDef::LetterTileDef(): count(0) {

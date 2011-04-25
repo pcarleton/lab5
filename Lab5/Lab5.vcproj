@@ -253,6 +253,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PlayOptions.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
