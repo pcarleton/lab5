@@ -31,3 +31,12 @@ int Player::checkString(string & input, LetterTileCollection & other) {
 string Player::getName() {
 	return name;
 }
+int Player::getPlayChoice() {
+	cout << "~~~****Do you want to (1) Get New Tiles, (2) Make a Play, or (3) Quit? (1, 2, or 3) ******~~~~~" << endl;
+	string input;
+	cin >> input;
+	return atoi(input.c_str());
+}
+LetterTileCollection & Player::getTileCollection() {
+	return tileCollection;
+}
