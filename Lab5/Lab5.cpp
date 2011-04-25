@@ -13,14 +13,10 @@
 
 #include "stdafx.h"
 #include "Lab5.h"
-#include "LetterTileCollection.h"
-#include "LetterTile.h"
-#include "Dictionary.h"
 #include <iostream>
 #include <fstream>
 #include <algorithm>
 #include <ctime>
-#include "GameBoard.h"
 
 int main(int argc, char* argv[])
 {
@@ -61,12 +57,10 @@ int main(int argc, char* argv[])
 		while(continuePlaying)
 		{
 			currentPlayer = &pnames[currentPlayerIndex];
-			LetterTileCollection curPlay;
+			PlayOptions curPlay;
 			int playScore = 0;
 			int curScore = 0;
 			string dirstr;
-			direction dir;
-			int x, y;
 			pair<int, int> curCoords;
 
 			letterBag.shuffle();
@@ -95,66 +89,17 @@ int main(int argc, char* argv[])
 					break;
 				case 2:
 					//Do the play.
-					curPlay = LetterTileCollection();
-					cout << "Enter what letters from your bag that you want to play." << endl;
-					
-					//Loop until valid letter tiles selected
-					while (true) {
-						string input;
-						cin >> input;
-						if (currentPlayer->checkString(input, curPlay) >= 0) {
-							break;
-						}
-						cout << "You don't have those tiles" << endl;
-						currentPlayer->showTiles(cout);
-					}
-
-					
-					cout << "Enter the *start* coordinates of the *main* word:" << endl;
-					
-					//Loop until valid coords recieved
-					while(true){
-						cin >> x;
-						cin.clear();
-						cin.sync();
-						cin >> y;
-						cin.clear();
-						cin.sync();
-						curCoords = make_pair(x, y);
-						if (game.checkBounds(curCoords)) {
-							break;
-						}
-						cout << "Invalid play, please enter 2 coordinates within the board." << endl;
-					}
-
-					cout << "Playing at : ( " << x << ", " << y << ")" << endl;
-					
-
-					//Loop until valid direction recieved
-					while (true) {
-						cout << "Enter which direction to play (v for vert, h for horiz)" << endl;
-						cin >> dirstr;
-						
-						if (dirstr == "v") {
-							dir = VERTICAL;
-							break;
-						} else if (dirstr == "h"){
-							dir = HORIZONTAL;
-							break;
-						} else {
-							cout << "Please enter a v or h" << endl;
-						}
-					}
+					curPlay = currentPlayer->obtainPlayOptions(game);
 					
 					//Process the play
 
-					playScore = game.play(curPlay,curCoords, dir);
+					playScore = game.play(curPlay.tiles, curPlay.coords, curPlay.dir);
 					cout << "PLAY SCORE: " << playScore << endl;
 					if (playScore <= 0) {
 						cout << "That play didn't work" << endl;
 						cout << "Possible plays that may work:" << endl;
-						game.showPossiblePlays(curPlay);
-						currentPlayer->receiveTiles(curPlay,curPlay.size());
+						game.showPossiblePlays(curPlay.tiles);
+						currentPlayer->receiveTiles(curPlay.tiles,curPlay.tiles.size());
 						continue;
 					} else {
 						curScore += playScore;

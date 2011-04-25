@@ -9,15 +9,15 @@
 
 #ifndef GAMEBOARD
 #define GAMEBOARD
-#include "Lab5.h"
-#include "LetterTile.h"
+
 #include <map>
 #include <utility>
 #include <iostream>
 #include <fstream>
+#include <set>
+#include "Constants.h"
 #include "Dictionary.h"
 #include "LetterTileCollection.h"
-
 #define MIN_COORD -7
 #define MAX_COORD 7
 #define INVALID_PLAY 0

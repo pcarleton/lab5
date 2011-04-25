@@ -20,6 +20,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "Constants.h"
 #include "LetterTile.h"
 
 using namespace std;

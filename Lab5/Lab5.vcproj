@@ -225,6 +225,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\Constants.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Dictionary.h"
 				>
 			</File>
@@ -250,6 +254,10 @@
 			</File>
 			<File
 				RelativePath=".\Player.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PlayOptions.h"
 				>
 			</File>
 			<File

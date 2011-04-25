@@ -40,3 +40,64 @@ int Player::getPlayChoice() {
 LetterTileCollection & Player::getTileCollection() {
 	return tileCollection;
 }
+PlayOptions Player::obtainPlayOptions(GameBoard & game) {
+	cout << "Enter what letters from your bag that you want to play." << endl;
+	LetterTileCollection curPlay;
+	PlayOptions playOps;
+	//Loop until valid letter tiles selected
+	while (true) {
+		string input;
+		cin >> input;
+		if (checkString(input, curPlay) >= 0) {
+			playOps.tiles = curPlay;
+			break;
+		}
+		cout << "You don't have those tiles" << endl;
+		showTiles(cout);
+	}
+
+	
+	cout << "Enter the *start* coordinates of the *main* word:" << endl;
+	
+	//Loop until valid coords recieved
+	int x = 0;
+	int y = 0;
+	while(true){
+		cin >> x;
+		cin.clear();
+		cin.sync();
+		cin >> y;
+		cin.clear();
+		cin.sync();
+		pair<int,int> curCoords = make_pair(x, y);
+		if (game.checkBounds(curCoords)) {
+			playOps.coords = curCoords;
+			break;
+		}
+		cout << "Invalid play, please enter 2 coordinates within the board." << endl;
+	}
+
+	cout << "Playing at : ( " << x << ", " << y << ")" << endl;
+	
+
+	//Loop until valid direction recieved
+	string dirstr;
+	direction dir;
+	while (true) {
+		cout << "Enter which direction to play (v for vert, h for horiz)" << endl;
+		cin >> dirstr;
+		
+		if (dirstr == "v") {
+			dir = VERTICAL;
+			playOps.dir = dir;
+			break;
+		} else if (dirstr == "h"){
+			dir = HORIZONTAL;
+			playOps.dir = dir;
+			break;
+		} else {
+			cout << "Please enter a v or h" << endl;
+		}
+	}
+	return playOps;
+}
