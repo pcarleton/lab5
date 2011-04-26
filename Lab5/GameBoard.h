@@ -43,7 +43,7 @@ private:
 	string checkCell(pair<int,int>);
 	
 
-	int checkWords(pair<int, int>, direction);
+	int checkWords(pair<int, int>, direction, bool);
 	direction oppDir(const direction &);
 
 	bool placeTiles(const LetterTileCollection & ltc, direction dir, 
@@ -62,6 +62,7 @@ public:
 	void print(ostream &);
 	void showPossiblePlays(LetterTileCollection &);
 	int addSpecialCells(const char *);
+	const Dictionary * getDict();
 };
 
 

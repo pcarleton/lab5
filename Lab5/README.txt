@@ -14,6 +14,7 @@ but not when it checks vertically and no word is formed.
 
 Finish implementing double/triple word scores
 
+
 Implement Virtual Player
 ------------------------
 Use word collection to iterate over possible words and possible play locations

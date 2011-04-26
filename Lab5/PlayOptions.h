@@ -10,6 +10,7 @@ struct PlayOptions{
 	pair<int,int> coords;
 	direction dir;
 	LetterTileCollection tiles;
+	bool valid;
 };
 
 #endif;

@@ -90,7 +90,11 @@ int main(int argc, char* argv[])
 				case 2:
 					//Do the play.
 					curPlay = currentPlayer->obtainPlayOptions(game);
-					
+
+					//If no valid play for 
+					if (!curPlay.valid) {
+						break;
+					}
 					//Process the play
 
 					playScore = game.play(curPlay.tiles, curPlay.coords, curPlay.dir);

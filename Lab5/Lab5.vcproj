@@ -219,6 +219,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\VirtualPlayer.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\WordCollection.cpp"
 				>
 			</File>
@@ -270,6 +274,10 @@
 			</File>
 			<File
 				RelativePath=".\targetver.h"
+				>
+			</File>
+			<File
+				RelativePath=".\VirtualPlayer.h"
 				>
 			</File>
 			<File

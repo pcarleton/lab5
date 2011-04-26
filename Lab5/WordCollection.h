@@ -28,6 +28,7 @@ public:
 	WordCollection(const LetterTileCollection &, const Dictionary &);
 	WordCollection(const WordCollection &);
 	void print(ostream & os = std::cout) const;
+	vector<LetterTileCollection> & getLTCS();
 
 private:
 	vector<LetterTileCollection> ltcols;

@@ -99,5 +99,6 @@ PlayOptions Player::obtainPlayOptions(GameBoard & game) {
 			cout << "Please enter a v or h" << endl;
 		}
 	}
+	playOps.valid = true;
 	return playOps;
 }

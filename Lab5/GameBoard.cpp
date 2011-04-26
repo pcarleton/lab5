@@ -142,7 +142,7 @@ int GameBoard::play(const LetterTileCollection & ltc,
 	}
 	
 	//Checks the word in the direction of the direction parameter
-	int totalScore = checkWords(coords, dir);
+	int totalScore = checkWords(coords, dir, suggesting);
 	
 	//If there was no valid score for the main word, remove the tiles and return
 	if (totalScore <= INVALID_PLAY)
@@ -158,7 +158,7 @@ int GameBoard::play(const LetterTileCollection & ltc,
 		iter != placedTiles.end(); ++iter)
 	{
 		//Checks the current tile for words perpendicular to main word
-		curScore = checkWords(*iter, oppDir(dir));
+		curScore = checkWords(*iter, oppDir(dir), suggesting);
 
 		//If there was an invalid word, remove tile and return
 		if (curScore < INVALID_PLAY)
@@ -216,7 +216,7 @@ string GameBoard::checkCell(pair<int,int> coord)
 }
 
 // Checks to make sure the word is contained in the dictionary
-int GameBoard::checkWords(pair<int, int> start, direction dir)
+int GameBoard::checkWords(pair<int, int> start, direction dir, bool suggesting)
 {
 	int * varies;
 	if (dir == HORIZONTAL)
@@ -236,6 +236,8 @@ int GameBoard::checkWords(pair<int, int> start, direction dir)
 
 	LetterTile * curTile; 
 
+	ostringstream oss;
+
 	while (*varies <= MAX_COORD && cells.find(start)->second != 0)
 	{
 		
@@ -252,12 +254,12 @@ int GameBoard::checkWords(pair<int, int> start, direction dir)
 				if(bonus == "tl")
 				{
 					curLets[curLets.size()-1].score = curLets[curLets.size()-1].score*3;
-					cout << "Triple letter score of " << curTile->score << " for " << curTile->letter << "!" << endl;
+					oss << "Triple letter score of " << curTile->score << " for " << curTile->letter << "!" << endl;
 				}
 				if(bonus == "dl")
 				{
 					curLets[curLets.size()-1].score = curLets[curLets.size()-1].score*2;
-					cout << "Double letter score of " << curTile->score << " for " << curTile->letter << "!" << endl;
+					oss << "Double letter score of " << curTile->score << " for " << curTile->letter << "!" << endl;
 				}
 
 				bonus = ""; //unset
@@ -275,6 +277,7 @@ int GameBoard::checkWords(pair<int, int> start, direction dir)
 	}
 	//If the word is in the dict, return score
 	if (dict->find(curWord.as_string())) {
+		cout << oss.str();
 		return curWord.score();
 	} else { //Otherwise return -1 to indicate it's not a valid move
 		return -1;
@@ -515,4 +518,9 @@ void GameBoard::eraseMultipliers(vector<pair<int,int>> & locs, set<pair<int,int>
 			bonus.erase(setIter);
 		}
 	}
+}
+
+const Dictionary * GameBoard::getDict() 
+{
+	return dict;
 }

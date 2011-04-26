@@ -26,7 +26,7 @@ public:
 	virtual int getPlayChoice();
 	LetterTileCollection & getTileCollection();
 	virtual PlayOptions obtainPlayOptions(GameBoard &);
-private:
+protected:
 	string name;
 	LetterTileCollection tileCollection;
 	unsigned int score;

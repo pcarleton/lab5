@@ -62,3 +62,8 @@ void WordCollection::print(ostream & os) const{
 }
 WordCollection::WordCollection(const WordCollection & other) : ltcols(other.ltcols) {
 }
+
+vector<LetterTileCollection> & WordCollection::getLTCS()
+{
+	return ltcols;
+}
