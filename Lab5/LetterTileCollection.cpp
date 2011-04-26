@@ -34,7 +34,7 @@ LetterTileCollection::LetterTileCollection(const LetterTileCollection & other, u
 	}
 	//POINTER ARITHMETIC EXPLANATION: I'm adding index to other.letters.begin()
 	//so it makes it from the beginning to the index specified.
-	letters = vector<LetterTile>(other.letters.begin(),other.letters.begin()+index);
+	letters = vector<LetterTile>(other.letters.begin(),other.letters.begin()+index+1);
 }
 
 //Constructor that takes a vector of LetterTiles

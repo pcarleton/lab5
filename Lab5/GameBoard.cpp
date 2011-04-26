@@ -244,22 +244,24 @@ int GameBoard::checkWords(pair<int, int> start, direction dir)
 			//Pushes the letter tile at the coordinate into the vector of letter tiles
 			curLets.push_back(*curTile);
 			
-				
-			//Special cell?
-			string bonus = checkCell(cells.find(start)->first);
-
-			if(bonus == "tl")
+			if (!suggesting)
 			{
-				curLets[curLets.size()-1].score = curLets[curLets.size()-1].score*3;
-				cout << "Triple letter score of " << curTile->score << " for " << curTile->letter << "!" << endl;
-			}
-			if(bonus == "dl")
-			{
-				curLets[curLets.size()-1].score = curLets[curLets.size()-1].score*2;
-				cout << "Double letter score of " << curTile->score << " for " << curTile->letter << "!" << endl;
-			}
+				//Special cell?
+				string bonus = checkCell(cells.find(start)->first);
 
-			bonus = ""; //unset
+				if(bonus == "tl")
+				{
+					curLets[curLets.size()-1].score = curLets[curLets.size()-1].score*3;
+					cout << "Triple letter score of " << curTile->score << " for " << curTile->letter << "!" << endl;
+				}
+				if(bonus == "dl")
+				{
+					curLets[curLets.size()-1].score = curLets[curLets.size()-1].score*2;
+					cout << "Double letter score of " << curTile->score << " for " << curTile->letter << "!" << endl;
+				}
+
+				bonus = ""; //unset
+			}
 			++(*varies);
 		
 	}
