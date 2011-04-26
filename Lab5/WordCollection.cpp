@@ -32,17 +32,12 @@ WordCollection::WordCollection(const LetterTileCollection & ltc, const Dictionar
 		// as in 0-1, 0-2, 0-3.  Further explanation in readme.
 		for (unsigned int i = 0; i < copyLtc.size(); ++i)
 		{
-			
 			LetterTileCollection subCopy (copyLtc,i);
-			//If the word is in the dict
-			if (dict.find(subCopy.as_string()))
+			//If the word is not already in "ltcols"
+			if (find(ltcols.begin(), ltcols.end(), subCopy) == ltcols.end())
 			{
-				//and it's not already in "ltcols"
-				if (find(ltcols.begin(), ltcols.end(), subCopy) == ltcols.end())
-				{
-					//add collection to ltcols.
-					ltcols.push_back(subCopy);
-				}
+				//add collection to ltcols.
+				ltcols.push_back(subCopy);
 			}
 		}
 	} while (copyLtc.permute());

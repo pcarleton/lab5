@@ -13,6 +13,7 @@
 
 #include "stdafx.h"
 #include "Lab5.h"
+#include "VirtualPlayer.h"
 #include <iostream>
 #include <fstream>
 #include <algorithm>
@@ -30,8 +31,8 @@ int main(int argc, char* argv[])
 
 	//Checks if arguments are valid, and assigns values to the dict and tile
 	//def filenames accordingly.
-	vector<Player> pnames;
-	if (checkArgs(argc, argv, dict_filename, tiledef_filename, pnames))
+	vector<Player *> allPlayers;
+	if (checkArgs(argc, argv, dict_filename, tiledef_filename, allPlayers))
 	{
 		int status = runFiles(dict_filename, tiledef_filename);
 		if(status != SUCCESS) {
@@ -51,12 +52,12 @@ int main(int argc, char* argv[])
 		unsigned int numTilesNeeded = 0;
 		
 
-		Player * currentPlayer = &pnames[0];
+		Player * currentPlayer = allPlayers[0];
 		int currentPlayerIndex = 0;
 		int unsuccessfulPlays = 0;
 		while(continuePlaying)
 		{
-			currentPlayer = &pnames[currentPlayerIndex];
+			currentPlayer = allPlayers[currentPlayerIndex];
 			PlayOptions curPlay;
 			int playScore = 0;
 			int curScore = 0;
@@ -83,7 +84,7 @@ int main(int argc, char* argv[])
 					currentPlayer->receiveTiles(letterBag, numTilesPerPlayer);
 					currentPlayerIndex++;
 					unsuccessfulPlays++;
-					if(unsuccessfulPlays == pnames.size()) {
+					if(unsuccessfulPlays == allPlayers.size()) {
 						continuePlaying = false;
 					}
 					break;
@@ -126,8 +127,8 @@ int main(int argc, char* argv[])
 					break;
 				case 3:
 					letterBag.move(currentPlayer->getTileCollection(), currentPlayer->getTileCollection().size());
-					pnames.erase(pnames.begin()+currentPlayerIndex);
-					if(pnames.size() == 1) {
+					allPlayers.erase(allPlayers.begin()+currentPlayerIndex);
+					if(allPlayers.size() == 1) {
 						continuePlaying = false;
 					}
 					break;
@@ -137,7 +138,7 @@ int main(int argc, char* argv[])
 					break;
 				}
 
-				if(currentPlayerIndex == pnames.size()) {
+				if(currentPlayerIndex == allPlayers.size()) {
 					currentPlayerIndex = 0;
 				}
 				
@@ -217,7 +218,7 @@ int usage(char * program_name)
 
 //Helper functions for determining if args are correct and assigning file names
 //to strings to be used in Main
-bool checkArgs(int argc, char* argv[], string & dict_filename, string & tiledef_filename, vector<Player> & pnames)
+bool checkArgs(int argc, char* argv[], string & dict_filename, string & tiledef_filename, vector<Player *> & allPlayers)
 {	
 	//Status for telling what we should be looking for next
 	enum status {UNKNOWN, DICT, PLAYERS, TILEDEF};
@@ -256,10 +257,15 @@ bool checkArgs(int argc, char* argv[], string & dict_filename, string & tiledef_
 			//this will only happen if no first player name is given
 			if (cur[0] == '-') return false;
 			//Check to make sure no repeat names
-			p = Player(cur);
-			if (find(pnames.begin(), pnames.end(), p) != pnames.end()) return false;
+			if (cur[0] == '_') {
+				allPlayers.push_back(new VirtualPlayer(cur));
+			}else {
+				p = Player(cur);
+				allPlayers.push_back(new Player(cur));
+			}
+			//if (find(allPlayers.begin(), allPlayers.end(), p) != allPlayers.end()) return false;
 			
-			pnames.push_back(p);
+			//allPlayers.push_back(p);
 			pInput = true;
 			//If this is the last name, go to unknown state
 			if (i+1 < argc) {

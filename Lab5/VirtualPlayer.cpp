@@ -5,6 +5,7 @@ using namespace std;
 VirtualPlayer::VirtualPlayer(string & n):Player(n),needNewTiles(false){
 	//Player(n);
 	//needNewTiles = false;
+	cout << "VIRTUAL PLAYER CREATED" << endl;
 }
 
 int VirtualPlayer::getPlayChoice() {
@@ -18,6 +19,7 @@ int VirtualPlayer::getPlayChoice() {
 
 PlayOptions VirtualPlayer::obtainPlayOptions(GameBoard & game) 
 {
+	cout << "making word collection" << endl;
 	WordCollection wc(tileCollection, *game.getDict());
 	//WARNING: Multi-lined for loop.
 	int maxScore = -1;
@@ -32,11 +34,14 @@ PlayOptions VirtualPlayer::obtainPlayOptions(GameBoard & game)
 		playOps.valid = false;
 		return playOps;
 	}
+	LetterTileCollection curPlay;
+	tileCollection.subCopy(playOps.tiles.as_string(), curPlay);
+	playOps.tiles = curPlay;
 	return playOps;
 
 }
 
-void VirtualPlayer::tryPlay(LetterTileCollection ltc, PlayOptions & temp, int & maxScore, GameBoard & game) {
+void VirtualPlayer::tryPlay(LetterTileCollection & ltc, PlayOptions & temp, int & maxScore, GameBoard & game) {
 	int playScore = 0;
 	for(int i = MIN_COORD; i <= MAX_COORD; ++i) {
 		for(int j = MIN_COORD; j <= MAX_COORD; ++j) {

@@ -22,7 +22,7 @@ using namespace std;
 int usage(char *);
 
 //Helper functions for checking if the arguments are valid
-bool checkArgs(int, char* argv[], string &, string &, vector<Player> &);
+bool checkArgs(int, char* argv[], string &, string &, vector<Player *> &);
 bool isD(char*);
 bool isT(char*);
 

@@ -10,7 +10,7 @@ public:
 	virtual int getPlayChoice();
 	virtual PlayOptions obtainPlayOptions(GameBoard &);
 private:
-	void tryPlay(LetterTileCollection, PlayOptions &, int &, GameBoard &);
+	void tryPlay(LetterTileCollection &, PlayOptions &, int &, GameBoard &);
 	bool needNewTiles;
 };
 
