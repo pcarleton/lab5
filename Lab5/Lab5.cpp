@@ -43,9 +43,9 @@ int main(int argc, char* argv[])
 		Dictionary localDict (dict_filename.c_str());
 		LetterTileCollection letterBag(tiledef_filename.c_str());
 
-
+		cout << "making game" << endl;
 		GameBoard game(&localDict);
-		
+		cout << "finished making game" << endl;
 		game.addSpecialCells("special_cells.txt");
 
 		bool continuePlaying = true;
@@ -143,10 +143,17 @@ int main(int argc, char* argv[])
 				}
 				
 			}
-			
+		
+		for (vector<Player* >::iterator iter = allPlayers.begin(); iter != allPlayers.end(); ++iter) {
+			delete *iter;
+		}
 		return SUCCESS;
 	}
-//Passes program name argument to usage function to print helpful usage message.
+	//Passes program name argument to usage function to print helpful usage message.
+	//Deletes possible players created by checkArgs.
+	for (vector<Player* >::iterator iter = allPlayers.begin(); iter != allPlayers.end(); ++iter) {
+		delete *iter;
+	}
 	return usage(argv[program_name_index]);
 }
 
@@ -260,7 +267,7 @@ bool checkArgs(int argc, char* argv[], string & dict_filename, string & tiledef_
 			if (cur[0] == '_') {
 				allPlayers.push_back(new VirtualPlayer(cur));
 			}else {
-				p = Player(cur);
+				//p = Player(cur);
 				allPlayers.push_back(new Player(cur));
 			}
 			//if (find(allPlayers.begin(), allPlayers.end(), p) != allPlayers.end()) return false;

@@ -63,6 +63,8 @@ public:
 	void showPossiblePlays(LetterTileCollection &);
 	int addSpecialCells(const char *);
 	const Dictionary * getDict();
+
+	~GameBoard();
 };
 
 

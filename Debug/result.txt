@@ -1,0 +1,66 @@
+VIRTUAL PLAYER CREATED
+VIRTUAL PLAYER CREATED
+It is _comp1's turn.
+Current Board 
+
+ 765432101234567
+7^  -   ^   -  ^7
+6 *   +   +   * 6
+5  *   - -   *  5
+4-  *   -   *  -4
+3    *     *    3
+2 +   +   +   + 2
+1  -   - -   -  1
+0^  -   *   -  ^0
+1  -   - -   -  1
+2 +   +   +   + 2
+3    *     *    3
+4-  *   -   *  -4
+5  *   - -   *  5
+6 *   +   +   * 6
+7^  -   ^   -  ^7
+ 765432101234567
+
+Current Letters
+a 3
+b 17
+a 3
+t 8
+a 3
+f 19
+c 12
+Current Score: 0
+making word collection
+Double letter score of 3 for a!
+PLAY SCORE: 53
+It is _comp2's turn.
+Current Board 
+
+ 765432101234567
+7^  -   ^   -  ^7
+6 *   +   +   * 6
+5  *   - -   *  5
+4-  *   -   *  -4
+3    *     *    3
+2 +   +   +   + 2
+1  -   - -   -  1
+0^  ABAFT   -  ^0
+1  -   - -   -  1
+2 +   +   +   + 2
+3    *     *    3
+4-  *   -   *  -4
+5  *   - -   *  5
+6 *   +   +   * 6
+7^  -   ^   -  ^7
+ 765432101234567
+
+Current Letters
+c 12
+u 11
+i 4
+s 2
+a 3
+r 5
+e 1
+Current Score: 0
+making word collection

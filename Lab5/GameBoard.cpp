@@ -320,6 +320,7 @@ bool GameBoard::placeTiles(const LetterTileCollection & ltc, direction dir,
 		// It's okay though, because map's destructor calls the destructors
 		// on all of its elements.
 		LetterTile * temp = new LetterTile(*iter);
+		cout << "DYNAMIC: " << temp << endl;
 		cells.find(coords)->second = temp;
 
 		//Keeps track of letters we placed
@@ -523,4 +524,12 @@ void GameBoard::eraseMultipliers(vector<pair<int,int>> & locs, set<pair<int,int>
 const Dictionary * GameBoard::getDict() 
 {
 	return dict;
+}
+
+GameBoard::~GameBoard() {
+	cout << "GB destructor" << endl;
+	for (map<pair<int,int>,LetterTile*>::iterator iter = cells.begin();
+		iter != cells.end(); ++iter) {
+			delete iter->second;
+	}
 }

@@ -2,6 +2,11 @@
 #include "Player.h"
 using namespace std;
 
+
+
+Player::~Player() {
+	cout << "destructing players" << endl;
+}
 Player::Player():name(""),score(0){
 }
 Player::Player(string & n):name(n),score(0){

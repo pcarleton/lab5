@@ -13,6 +13,8 @@ class GameBoard;
 
 class Player{
 public:
+
+	virtual ~Player();
 	Player();
 	Player(string &);
 	bool operator ==(const Player &) const;
