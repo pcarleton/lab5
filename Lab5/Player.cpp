@@ -1,3 +1,10 @@
+// Player.cpp
+//
+// Brian, Stan, Paul
+//
+// Defines methods for Player class.
+
+
 #include "stdafx.h"
 #include "Player.h"
 using namespace std;
@@ -26,6 +33,10 @@ void Player::showTiles(ostream & os) {
 }
 int Player::getScore() {
 	return score;
+}
+
+bool Player::operator <(const Player& other) const {
+	return score < other.score;
 }
 void Player::addScore(int s) {
 	score += s;

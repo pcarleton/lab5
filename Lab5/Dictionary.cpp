@@ -38,8 +38,10 @@ int Dictionary::add(const char * fname) {
 		//Reads in words from dictionary file and adds them to set.
 		while (ifs >> temp)
 		{
-			transform(temp.begin(), temp.end(),temp.begin(), ::tolower);
-			words.insert(temp);
+			if (temp.substr(0, 2) != "//") {
+				transform(temp.begin(), temp.end(),temp.begin(), ::tolower);
+				words.insert(temp);
+			} 
 		}
 
 		return SUCCESS;

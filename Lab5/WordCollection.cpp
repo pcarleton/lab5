@@ -42,8 +42,6 @@ WordCollection::WordCollection(const LetterTileCollection & ltc, const Dictionar
 		}
 	} while (copyLtc.permute());
 
-	//Sort the LetterCollections by score for printing
-	sort(ltcols.begin(), ltcols.end());
 }
 
 

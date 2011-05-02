@@ -28,6 +28,8 @@ public:
 	virtual int getPlayChoice();
 	LetterTileCollection & getTileCollection();
 	virtual PlayOptions obtainPlayOptions(GameBoard &);
+
+	virtual bool operator< (const Player &) const;
 protected:
 	string name;
 	LetterTileCollection tileCollection;

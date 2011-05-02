@@ -26,6 +26,8 @@ bool checkArgs(int, char* argv[], string &, string &, vector<Player *> &);
 bool isD(char*);
 bool isT(char*);
 
+bool comparePlayers(Player * left, Player * right);
+
 
 
 //Methods to generate tile defs file if the filename specified doesn't exist

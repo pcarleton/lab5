@@ -1,3 +1,11 @@
+// VirtualPlayer.h
+//
+// Brian, Paul, Stan
+//
+// Declares functions for a virtual player class that tries to make
+// the best move possible with the letters it has.
+
+
 #ifndef VIRTUAL_PLAYER
 #define VIRTUAL_PLAYER
 #include "Player.h"

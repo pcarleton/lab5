@@ -235,7 +235,8 @@ int GameBoard::checkWords(pair<int, int> start, direction dir, bool suggesting)
 	//end of the word
 
 	LetterTile * curTile; 
-
+	//Int to keep track of bonus multipliers from double and triple word scores.
+	int multipliers = 1;
 	ostringstream oss;
 
 	while (*varies <= MAX_COORD && cells.find(start)->second != 0)
@@ -261,6 +262,14 @@ int GameBoard::checkWords(pair<int, int> start, direction dir, bool suggesting)
 					curLets[curLets.size()-1].score = curLets[curLets.size()-1].score*2;
 					oss << "Double letter score of " << curTile->score << " for " << curTile->letter << "!" << endl;
 				}
+				if (bonus == "dw") {
+					oss << "Double word score for " << curTile->letter << "!" << endl;
+					multipliers *= 2;
+				}				
+				if (bonus == "tw") {
+					oss << "Triple word score for " << curTile->letter << "!" << endl;
+					multipliers *= 3;
+				}
 
 				bonus = ""; //unset
 			}
@@ -278,7 +287,8 @@ int GameBoard::checkWords(pair<int, int> start, direction dir, bool suggesting)
 	//If the word is in the dict, return score
 	if (dict->find(curWord.as_string())) {
 		cout << oss.str();
-		return curWord.score();
+		//multiples the words scores by the bonus multpliers discovered above.
+		return curWord.score()*multipliers;
 	} else { //Otherwise return -1 to indicate it's not a valid move
 		return -1;
 	}
@@ -320,7 +330,6 @@ bool GameBoard::placeTiles(const LetterTileCollection & ltc, direction dir,
 		// It's okay though, because map's destructor calls the destructors
 		// on all of its elements.
 		LetterTile * temp = new LetterTile(*iter);
-		cout << "DYNAMIC: " << temp << endl;
 		cells.find(coords)->second = temp;
 
 		//Keeps track of letters we placed
@@ -527,7 +536,6 @@ const Dictionary * GameBoard::getDict()
 }
 
 GameBoard::~GameBoard() {
-	cout << "GB destructor" << endl;
 	for (map<pair<int,int>,LetterTile*>::iterator iter = cells.begin();
 		iter != cells.end(); ++iter) {
 			delete iter->second;

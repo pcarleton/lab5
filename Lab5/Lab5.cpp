@@ -43,9 +43,7 @@ int main(int argc, char* argv[])
 		Dictionary localDict (dict_filename.c_str());
 		LetterTileCollection letterBag(tiledef_filename.c_str());
 
-		cout << "making game" << endl;
 		GameBoard game(&localDict);
-		cout << "finished making game" << endl;
 		game.addSpecialCells("special_cells.txt");
 
 		bool continuePlaying = true;
@@ -79,6 +77,7 @@ int main(int argc, char* argv[])
 
 			switch(playChoice){
 				case 1:
+					//Move old tiles back in to bag
 					letterBag.move(currentPlayer->getTileCollection(), currentPlayer->getTileCollection().size());
 					letterBag.shuffle();
 					currentPlayer->receiveTiles(letterBag, numTilesPerPlayer);
@@ -143,10 +142,17 @@ int main(int argc, char* argv[])
 				}
 				
 			}
-		
+
+
+
+		sort(allPlayers.begin(), allPlayers.end(), comparePlayers );
+		cout << "Final Score: " << endl;		
 		for (vector<Player* >::iterator iter = allPlayers.begin(); iter != allPlayers.end(); ++iter) {
+			cout << (*iter)->getName() << " : " << (*iter)->getScore() << endl;
 			delete *iter;
 		}
+
+
 		return SUCCESS;
 	}
 	//Passes program name argument to usage function to print helpful usage message.
@@ -301,18 +307,6 @@ int read_dict(vector<string> & result, const char * dict)
 	ifstream ifs (dict);
 	if (ifs.is_open())
 	{
-		string temp;
-
-		//Reads in words from dictionary file and pushes them on to result string.
-		while (ifs >> temp)
-		{
-			if (temp.substr(0, 1) != "//")
-			{
-				transform(temp.begin(), temp.end(),temp.begin(), ::tolower);
-				result.push_back(temp);
-			}
-		}
-
 		return SUCCESS;
 
 	} else {
@@ -410,4 +404,9 @@ int write_tile_defs(const vector<LetterTileDef> tiledefs, const char * filename)
 		cout << "Error when trying to write tile defs to file" << endl;
 		return WRITE_TD_ERR;
 	}
+}
+
+
+bool comparePlayers(Player * left, Player * right) {
+	return left->getScore() > right->getScore();
 }

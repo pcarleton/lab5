@@ -1,24 +1,38 @@
-fix double letter tiles getting doubled and counted twice
+Lab 5
 
-To do:
------
-Fix so special tile bonuses don't get printed on 1 letter cross checks
-i.e. 
+Paul Carleton
+Stanford Rosenthal
+Brian Fink
 
-	 P
-	 O
-	SPECIAL
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+DESIGN DECISIONS:
+	The y-coordinates of word placement is reversed. The upwards direction is negative. This is because we thought
+		it was more intutitive to play words in the positive (downwards) direction.
+	When virtual players play, they compare every permutation of their letter tiles to every position in the board. This
+		is extremely slow, but it works and finds very high score word combinations.
+	Our player class abstracts away internal player operations.
+	We defined a PlayOptions struct which holds the coordinates, direction, and letter tiles for a particular play. These play options
+		are created inside the obtainPlayOptions function of player and virtual player.
+	We defined a destructor for the game board so that we can delete all the dynamically allocated letter tiles.
+	Players are deleted right before the main function returns.
+
+ERRORS:
+Include Errors:
+	We ran into several errors with the includes.  Our includes were circular, and we defined many constants in the Lab5.h
+	To resolve these errors we defined a separate header called "Constants.h" which held the constants for the lab.
+
+Syntax Errors:
+	We left off some semicolons on the class declarations which led to compiling errors.
 	
-If I is a double letter score, it should get printed when checking "SPECIAL"
-but not when it checks vertically and no word is formed.
-
-Finish implementing double/triple word scores
 
 
-Implement Virtual Player
-------------------------
-Use word collection to iterate over possible words and possible play locations
--NOTE: My word collection class got points off, we may want to replace it with a different one
+Testing inputs:
+Lab5.exe -d dictionary_example.txt -t scrabble_tiles.txt -p Paul Brian Stan
+--Normal operation
+Any time -d, -t, or -p is missing the usage message is printed.
+Errors that are relevant to files are printed when there are problems with opening files.
 
-Things to consider: There are a ton of possible play locations.
-Should we try to use our suggesting stuff from lab 4 to make it easier?
+EXTRA CREDIT
+	Our virtual players find the best possible play on the board.

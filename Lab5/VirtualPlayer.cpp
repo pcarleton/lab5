@@ -1,3 +1,10 @@
+// Virtual Player.cpp
+//
+//  Defines methods for VirtualPlayer.cpp
+//  
+//
+
+
 #include "stdafx.h"
 #include "VirtualPlayer.h"
 using namespace std;
@@ -19,13 +26,15 @@ int VirtualPlayer::getPlayChoice() {
 
 PlayOptions VirtualPlayer::obtainPlayOptions(GameBoard & game) 
 {
-	cout << "making word collection" << endl;
+	//Constructs word collection with current tiles
 	WordCollection wc(tileCollection, *game.getDict());
-	//WARNING: Multi-lined for loop.
+	
+
+	//Attemps to play every combination of words these tiles make
 	int maxScore = -1;
 	PlayOptions playOps;
-	for ( vector<LetterTileCollection>::iterator  iter = wc.getLTCS().begin(); //continued on the next line
-			iter != wc.getLTCS().end(); ++iter) //continued from previous line
+	for ( vector<LetterTileCollection>::iterator  iter = wc.getLTCS().begin();
+			iter != wc.getLTCS().end(); ++iter)
 	{
 		tryPlay(*iter, playOps, maxScore, game);
 	}
@@ -42,6 +51,8 @@ PlayOptions VirtualPlayer::obtainPlayOptions(GameBoard & game)
 }
 
 void VirtualPlayer::tryPlay(LetterTileCollection & ltc, PlayOptions & temp, int & maxScore, GameBoard & game) {
+
+	//Attempts to play the specified tiles at every location in the board.
 	int playScore = 0;
 	for(int i = MIN_COORD; i <= MAX_COORD; ++i) {
 		for(int j = MIN_COORD; j <= MAX_COORD; ++j) {
