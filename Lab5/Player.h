@@ -1,3 +1,8 @@
+// Lab 5
+// Player.h
+
+// Brian Fink, Paul Carleton, Stan Rosenthal
+
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -13,8 +18,6 @@ class GameBoard;
 
 class Player{
 public:
-
-	virtual ~Player();
 	Player();
 	Player(string &);
 	bool operator ==(const Player &) const;

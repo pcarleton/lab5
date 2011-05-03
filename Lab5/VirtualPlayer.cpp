@@ -10,11 +10,9 @@
 using namespace std;
 
 VirtualPlayer::VirtualPlayer(string & n):Player(n),needNewTiles(false){
-	//Player(n);
-	//needNewTiles = false;
-	cout << "VIRTUAL PLAYER CREATED" << endl;
 }
 
+// Default to playing tiles. If no plays are possible, say that you want new tiles
 int VirtualPlayer::getPlayChoice() {
 	if (needNewTiles)
 	{
@@ -24,6 +22,9 @@ int VirtualPlayer::getPlayChoice() {
 	return 2;
 }
 
+// Obtains the play options. Finds the best possible play on 
+// the current board. Compares every permutation of the letter tiles
+// to every position on the board.
 PlayOptions VirtualPlayer::obtainPlayOptions(GameBoard & game) 
 {
 	//Constructs word collection with current tiles
@@ -50,6 +51,9 @@ PlayOptions VirtualPlayer::obtainPlayOptions(GameBoard & game)
 
 }
 
+// Finds the best possible play on the current board. Plays at
+// every position on the board and finds the best play for
+// the given letter tiles
 void VirtualPlayer::tryPlay(LetterTileCollection & ltc, PlayOptions & temp, int & maxScore, GameBoard & game) {
 
 	//Attempts to play the specified tiles at every location in the board.

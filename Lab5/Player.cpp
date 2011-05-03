@@ -9,44 +9,46 @@
 #include "Player.h"
 using namespace std;
 
-
-
-Player::~Player() {
-	cout << "destructing players" << endl;
-}
 Player::Player():name(""),score(0){
 }
 Player::Player(string & n):name(n),score(0){
 }
-
+// Two players are equal if their names are the same
 bool Player::operator ==(const Player &other) const{
 	return other.name == name;
 }
+// How many tiles does the Player have?
 int Player::numTiles(){
 	return tileCollection.size();
 }
+// Receive tiles from the bag
 void Player::receiveTiles(LetterTileCollection & bag, int n) {
 	tileCollection.move(bag, n);
 }
+// Print the tiles the Player has
 void Player::showTiles(ostream & os) {
 	tileCollection.print(os);
 }
+// Get the player's score
 int Player::getScore() {
 	return score;
 }
-
+// Compare the Players' scores
 bool Player::operator <(const Player& other) const {
 	return score < other.score;
 }
 void Player::addScore(int s) {
 	score += s;
 }
+// Check the input against the tile collection
 int Player::checkString(string & input, LetterTileCollection & other) {
 	return tileCollection.subCopy(input, other);
 }
+//get the name
 string Player::getName() {
 	return name;
 }
+// Obtain the play choice
 int Player::getPlayChoice() {
 	cout << "~~~****Do you want to (1) Get New Tiles, (2) Make a Play, or (3) Quit? (1, 2, or 3) ******~~~~~" << endl;
 	string input;
@@ -56,6 +58,8 @@ int Player::getPlayChoice() {
 LetterTileCollection & Player::getTileCollection() {
 	return tileCollection;
 }
+// Obtain the play options. This includes the tiles to play,
+// the coordinate of the play, and the direction of the play.
 PlayOptions Player::obtainPlayOptions(GameBoard & game) {
 	cout << "Enter what letters from your bag that you want to play." << endl;
 	LetterTileCollection curPlay;
